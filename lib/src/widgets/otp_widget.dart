@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/src/widgets/base_widget.dart';
-import 'package:flutter_paystack/src/widgets/common/extensions.dart';
 import 'package:flutter_paystack/src/widgets/custom_dialog.dart';
 import 'package:flutter_paystack/src/widgets/input/otp_field.dart';
 
@@ -16,51 +15,51 @@ class OtpWidget extends StatefulWidget {
 }
 
 class _OtpWidgetState extends BaseState<OtpWidget> {
-  var _formKey = new GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
   var _autoValidate = AutovalidateMode.disabled;
   String? _otp;
   var heightBox = const SizedBox(height: 20.0);
 
   @override
   Widget buildChild(BuildContext context) {
-    return new CustomAlertDialog(
-      content: new SingleChildScrollView(
-        child: new Container(
+    return CustomAlertDialog(
+      content: SingleChildScrollView(
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: new Form(
+          child: Form(
             key: _formKey,
             autovalidateMode: _autoValidate,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new Image.asset('assets/images/otp.png',
+                Image.asset('assets/images/otp.png',
                     width: 30.0, package: 'flutter_paystack'),
                 heightBox,
-                new Text(
+                Text(
                   widget.message!,
                   textAlign: TextAlign.center,
                   style:  TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: context.textTheme().headline6?.color,
+                    color: Theme.of(context).textTheme.titleMedium?.color,
                     fontSize: 15.0,
                   ),
                 ),
                 heightBox,
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: new OtpField(
+                  child: OtpField(
                     onSaved: (String? value) => _otp = value,
-                    borderColor: context.colorScheme().secondary,
+                    borderColor: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
                 heightBox,
-                new AccentButton(
+                AccentButton(
                   onPressed: _validateInputs,
                   text: 'Authorize',
                 ),
                 heightBox,
-                new WhiteButton(
+                WhiteButton(
                   onPressed: onCancelPress,
                   text: 'Cancel',
                   flat: true,
@@ -75,7 +74,7 @@ class _OtpWidgetState extends BaseState<OtpWidget> {
   }
 
   void _validateInputs() {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     final FormState form = _formKey.currentState!;
     if (form.validate()) {
       form.save();

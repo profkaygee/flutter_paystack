@@ -10,7 +10,6 @@ import 'package:flutter_paystack/src/widgets/base_widget.dart';
 import 'package:flutter_paystack/src/widgets/checkout/bank_checkout.dart';
 import 'package:flutter_paystack/src/widgets/checkout/card_checkout.dart';
 import 'package:flutter_paystack/src/widgets/checkout/checkout_method.dart';
-import 'package:flutter_paystack/src/widgets/common/extensions.dart';
 import 'package:flutter_paystack/src/widgets/custom_dialog.dart';
 import 'package:flutter_paystack/src/widgets/error_widget.dart';
 import 'package:flutter_paystack/src/widgets/sucessful_widget.dart';
@@ -28,7 +27,8 @@ class CheckoutWidget extends StatefulWidget {
   final CardServiceContract cardsService;
   final String publicKey;
 
-  CheckoutWidget({
+  const CheckoutWidget({
+    Key? key,
     required this.method,
     required this.charge,
     required this.bankService,
@@ -38,7 +38,7 @@ class CheckoutWidget extends StatefulWidget {
     this.logo,
     this.hideEmail = false,
     this.hideAmount = false,
-  });
+  }) : super(key: key);
 
   @override
   _CheckoutWidgetState createState() => _CheckoutWidgetState(charge);
@@ -66,13 +66,13 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
     _init();
     _initPaymentMethods();
     _currentIndex = _getCurrentTab();
-    _showTabs = widget.method == CheckoutMethod.selectable ? true : false;
-    _tabController = new TabController(
+    _showTabs = widget.method == CheckoutMethod.selectable;
+    _tabController = TabController(
         vsync: this,
         length: _methodWidgets.length,
         initialIndex: _currentIndex!);
     _tabController!.addListener(_indexChange);
-    _animationController = new AnimationController(
+    _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
@@ -94,7 +94,7 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Row(
+        const Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -109,24 +109,24 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
             )
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             if (widget.logo != null)
               Padding(
-                padding: EdgeInsetsDirectional.only(end: 3),
+                padding: const EdgeInsetsDirectional.only(end: 3),
                 child: Image.asset(
                   'assets/images/paystack_icon.png',
-                  key: Key("PaystackBottomIcon"),
+                  key: const Key("PaystackBottomIcon"),
                   package: 'flutter_paystack',
                   height: 16,
                 ),
               ),
             Image.asset(
               'assets/images/paystack.png',
-              key: Key("PaystackLogo"),
+              key: const Key("PaystackLogo"),
               package: 'flutter_paystack',
               height: 15,
             )
@@ -134,70 +134,68 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
         )
       ],
     );
-    return new CustomAlertDialog(
+    return CustomAlertDialog(
       expanded: true,
       fullscreen: widget.fullscreen,
-      titlePadding: EdgeInsets.all(0.0),
+      titlePadding: const EdgeInsets.all(0.0),
       onCancelPress: onCancelPress,
       title: _buildTitle(),
-      content: new Container(
-        child: new SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            behavior: HitTestBehavior.translucent,
-            child: new Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 10.0),
-                child: Column(
-                  children: <Widget>[
-                    _showProcessingError()
-                        ? _buildErrorWidget()
-                        : _paymentSuccessful
-                            ? _buildSuccessfulWidget()
-                            : _methodWidgets[_currentIndex!].child,
-                    SizedBox(height: 20),
-                    securedWidget
-                  ],
-                )),
-          ),
+      content: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: 10.0),
+              child: Column(
+                children: <Widget>[
+                  _showProcessingError()
+                      ? _buildErrorWidget()
+                      : _paymentSuccessful
+                          ? _buildSuccessfulWidget()
+                          : _methodWidgets[_currentIndex!].child,
+                  const SizedBox(height: 20),
+                  securedWidget
+                ],
+              )),
         ),
       ),
     );
   }
 
   Widget _buildTitle() {
-    final accentColor = context.colorScheme().secondary;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     var emailAndAmount = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         if (!widget.hideEmail && _charge.email != null)
           Text(
             _charge.email!,
-            key: Key("ChargeEmail"),
+            key: const Key("ChargeEmail"),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: context.textTheme().bodySmall?.color, fontSize: 12.0),
+                color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 12.0),
           ),
         if (!widget.hideAmount && !_charge.amount.isNegative)
           Row(
-            key: Key("DisplayAmount"),
+            key: const Key("DisplayAmount"),
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 'Pay',
                 style: TextStyle(
-                    fontSize: 14.0, color: context.textTheme().headline1?.color),
+                    fontSize: 14.0, color: Theme.of(context).textTheme.headlineMedium?.color),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5.0,
               ),
               Flexible(
                   child: Text(Utils.formatAmount(_charge.amount),
                       style: TextStyle(
                           fontSize: 15.0,
-                          color: context.textTheme().headline6?.color,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                           fontWeight: FontWeight.bold)))
             ],
           )
@@ -207,28 +205,28 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        new Container(
+        Container(
           padding: const EdgeInsets.all(10.0),
-          child: new Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               if (widget.logo == null)
                 Image.asset(
                   'assets/images/paystack_icon.png',
-                  key: Key("PaystackIcon"),
+                  key: const Key("PaystackIcon"),
                   package: 'flutter_paystack',
                   width: 25,
                 )
               else
                 SizedBox(
-                  key: Key("Logo"),
+                  key: const Key("Logo"),
                   child: widget.logo,
                 ),
-              new SizedBox(
+              const SizedBox(
                 width: 50,
               ),
-              new Expanded(child: emailAndAmount),
+              Expanded(child: emailAndAmount),
             ],
           ),
         ),
@@ -238,21 +236,22 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
   }
 
   Widget buildCheckoutMethods(Color accentColor) {
+    final surfaceColor = Theme.of(context).colorScheme.surface;
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       curve: Curves.fastOutSlowIn,
-      child: new Container(
-        color: context.colorScheme().background.withOpacity(0.5),
+      child: Container(
+        color: Color.fromRGBO(surfaceColor.red, surfaceColor.green, surfaceColor.blue, 0.5),
         height: _tabHeight,
         alignment: Alignment.center,
-        child: new TabBar(
+        child: TabBar(
           controller: _tabController,
           isScrollable: true,
-          unselectedLabelColor: context.colorScheme().onBackground,
+          unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
           labelColor: accentColor,
           labelStyle:
-              new TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
-          indicator: new ShapeDecoration(
+              const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+          indicator: ShapeDecoration(
             shape: RoundedRectangleBorder(
                   borderRadius: tabBorderRadius,
                   side: BorderSide(
@@ -269,9 +268,9 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
                 ),
           ),
           tabs: _methodWidgets.map<Tab>((MethodItem m) {
-            return new Tab(
+            return Tab(
               text: m.text,
-              icon: new Icon(
+              icon: Icon(
                 m.icon,
                 size: 24.0,
               ),
@@ -292,11 +291,11 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
 
   void _initPaymentMethods() {
     _methodWidgets = [
-      new MethodItem(
+      MethodItem(
           text: 'Card',
           icon: Icons.credit_card,
-          child: new CardCheckout(
-            key: Key("CardCheckout"),
+          child: CardCheckout(
+            key: const Key("CardCheckout"),
             publicKey: widget.publicKey,
             service: widget.cardsService,
             charge: _charge,
@@ -311,10 +310,10 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
               _charge.card!.expiryYear = card.expiryYear;
             },
           )),
-      new MethodItem(
+      MethodItem(
         text: 'Bank',
         icon: Icons.account_balance,
-        child: new BankCheckout(
+        child: BankCheckout(
           publicKey: widget.publicKey,
           charge: _charge,
           service: widget.bankService,
@@ -330,7 +329,6 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
       _tabHeight = processing || _paymentSuccessful || _showProcessingError()
           ? 0.0
           : kFullTabHeight;
-      processing = processing;
     });
   }
 
@@ -382,10 +380,10 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
     _initPaymentMethods();
     void _resetShowTabs() {
       _response = null; // Reset the response
-      _showTabs = widget.method == CheckoutMethod.selectable ? true : false;
+      _showTabs = widget.method == CheckoutMethod.selectable;
     }
 
-    return new ErrorWidget(
+    return ErrorWidget(
       text: _paymentError,
       method: widget.method,
       isCardPayment: _charge.card!.isValid(),
@@ -394,7 +392,7 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
         setState(() {
           _resetShowTabs();
           _onPaymentError(null);
-          _charge.card = new PaymentCard.empty();
+          _charge.card = PaymentCard.empty();
           _tabController!.index = 1;
           _paymentError = null;
         });
@@ -403,7 +401,7 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
         setState(() {
           _resetShowTabs();
           _onPaymentError(null);
-          _charge.card = new PaymentCard.empty();
+          _charge.card = PaymentCard.empty();
           _tabController!.index = 0;
         });
       },
@@ -415,7 +413,7 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
     );
   }
 
-  Widget _buildSuccessfulWidget() => new SuccessfulWidget(
+  Widget _buildSuccessfulWidget() => SuccessfulWidget(
         amount: _charge.amount,
         onCountdownComplete: () {
           if (_response!.card != null) {
@@ -434,7 +432,7 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
     CheckoutResponse? response = _response;
     if (response == null) {
       response = CheckoutResponse.defaults();
-      response.method = _tabController!.index == 0
+      response.method = _tabController?.index == 0
           ? CheckoutMethod.card
           : CheckoutMethod.bank;
     }
@@ -449,4 +447,4 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
   }
 }
 
-typedef void OnResponse<CheckoutResponse>(CheckoutResponse response);
+typedef OnResponse<CheckoutResponse> = void Function(CheckoutResponse response);

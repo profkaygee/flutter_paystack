@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/src/widgets/common/extensions.dart';
 
 /// This is a modification of [AlertDialog]. A lot of modifications was made. The goal is
 /// to retain the dialog feel and look while adding the close IconButton
@@ -30,20 +29,20 @@ class CustomAlertDialog extends StatelessWidget {
     final List<Widget> children = <Widget>[];
 
     if (title != null && titlePadding != null) {
-      children.add(new Padding(
+      children.add(Padding(
         padding: titlePadding!,
-        child: new DefaultTextStyle(
-          style: context.textTheme().headline6!,
-          child: new Semantics(child: title, namesRoute: true),
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.titleLarge!,
+          child: Semantics(child: title, namesRoute: true),
         ),
       ));
     }
 
-    children.add(new Flexible(
-      child: new Padding(
+    children.add(Flexible(
+      child: Padding(
         padding: contentPadding,
-        child: new DefaultTextStyle(
-          style: context.textTheme().subtitle1!,
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.titleMedium!,
           child: content,
         ),
       ),
@@ -55,35 +54,35 @@ class CustomAlertDialog extends StatelessWidget {
   Widget buildContent(context, List<Widget> children) {
     Widget widget;
     if (fullscreen) {
-      widget = new Material(
-        child: new Container(
+      widget = Material(
+        child: Container(
             child: onCancelPress == null
-                ? new Padding(
+                ? Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10.0,
                       vertical: 20.0,
                     ),
-                    child: new Column(
+                    child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: children),
                   )
-                : new Column(
+                : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      new Align(
+                      Align(
                         alignment: Alignment.topRight,
-                        child: new IconButton(
-                          icon: new Icon(Icons.close),
+                        child: IconButton(
+                          icon: Icon(Icons.close),
                           onPressed: onCancelPress,
                           color: Colors.black54,
                           padding: const EdgeInsets.all(15.0),
                           iconSize: 30.0,
                         ),
                       ),
-                      new Expanded(
-                          child: new Padding(
+                      Expanded(
+                          child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: new Column(
+                        child: Column(
                           children: children,
                         ),
                       ))
@@ -91,26 +90,26 @@ class CustomAlertDialog extends StatelessWidget {
                   )),
       );
     } else {
-      var body = new Material(
+      var body = Material(
         type: MaterialType.card,
-        borderRadius: new BorderRadius.circular(10.0),
-        child: new Column(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: children,
         ),
       );
-      var child = new IntrinsicWidth(
+      var child = IntrinsicWidth(
         child: onCancelPress == null
             ? body
-            : new Column(
+            : Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  new Container(
+                  Container(
                     margin: const EdgeInsets.all(10.0),
-                    child: new IconButton(
+                    child: IconButton(
                         highlightColor: Colors.white54,
                         splashColor: Colors.white54,
                         color: Colors.white,
@@ -121,11 +120,11 @@ class CustomAlertDialog extends StatelessWidget {
                         ),
                         onPressed: onCancelPress),
                   ),
-                  new Flexible(child: body),
+                  Flexible(child: body),
                 ],
               ),
       );
-      widget = new CustomDialog(child: child, expanded: expanded);
+      widget = CustomDialog(child: child, expanded: expanded);
     }
     return widget;
   }
@@ -149,25 +148,25 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new AnimatedPadding(
+    return AnimatedPadding(
       padding: MediaQuery.of(context).viewInsets +
           const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
       duration: insetAnimationDuration,
       curve: insetAnimationCurve,
-      child: new MediaQuery.removeViewInsets(
+      child: MediaQuery.removeViewInsets(
         removeLeft: true,
         removeTop: true,
         removeRight: true,
         removeBottom: true,
         context: context,
-        child: new Center(
-          child: new ConstrainedBox(
-            constraints: new BoxConstraints(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
                 minWidth: expanded
                     ? math.min(
                         (MediaQuery.of(context).size.width - 40.0), 332.0)
                     : 280.0),
-            child: new Material(
+            child: Material(
               elevation: 50.0,
               type: MaterialType.transparency,
               child: child,

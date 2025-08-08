@@ -18,15 +18,15 @@ String backendUrl = '{YOUR_BACKEND_URL}';
 String paystackPublicKey = '{YOUR_PAYSTACK_PUBLIC_KEY}';
 const String appName = 'Paystack Example';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: appName,
       darkTheme: ThemeData.dark(),
-      home: new HomePage(),
+      home: HomePage(),
     );
   }
 }
@@ -37,12 +37,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final _verticalSizeBox = const SizedBox(height: 20.0);
   final _horizontalSizeBox = const SizedBox(width: 10.0);
   final plugin = PaystackPlugin();
-  var _border = new Container(
+  var _border = Container(
     width: double.infinity,
     height: 1.0,
     color: Colors.red,
@@ -63,34 +63,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(title: const Text(appName)),
-      body: new Container(
+      appBar: AppBar(title: const Text(appName)),
+      body: Container(
         padding: const EdgeInsets.all(20.0),
-        child: new Form(
+        child: Form(
           key: _formKey,
-          child: new SingleChildScrollView(
-            child: new ListBody(
+          child: SingleChildScrollView(
+            child: ListBody(
               children: <Widget>[
-                new Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    new Expanded(
-                      child: const Text('Initalize transaction from:'),
+                    const Expanded(
+                      child: Text('Initalize transaction from:'),
                     ),
-                    new Expanded(
-                      child: new Column(
+                    Expanded(
+                      child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            new RadioListTile<int>(
+                            RadioListTile<int>(
                               value: 0,
                               groupValue: _radioValue,
                               onChanged: _handleRadioValueChanged,
                               title: const Text('Local'),
                             ),
-                            new RadioListTile<int>(
+                            RadioListTile<int>(
                               value: 1,
                               groupValue: _radioValue,
                               onChanged: _handleRadioValueChanged,
@@ -102,32 +102,32 @@ class _HomePageState extends State<HomePage> {
                 ),
                 _border,
                 _verticalSizeBox,
-                new TextFormField(
+                TextFormField(
                   decoration: const InputDecoration(
-                    border: const UnderlineInputBorder(),
+                    border: UnderlineInputBorder(),
                     labelText: 'Card number',
                   ),
                   onSaved: (String? value) => _cardNumber = value,
                 ),
                 _verticalSizeBox,
-                new Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new Expanded(
-                      child: new TextFormField(
+                    Expanded(
+                      child: TextFormField(
                         decoration: const InputDecoration(
-                          border: const UnderlineInputBorder(),
+                          border: UnderlineInputBorder(),
                           labelText: 'CVV',
                         ),
                         onSaved: (String? value) => _cvv = value,
                       ),
                     ),
                     _horizontalSizeBox,
-                    new Expanded(
-                      child: new TextFormField(
+                    Expanded(
+                      child: TextFormField(
                         decoration: const InputDecoration(
-                          border: const UnderlineInputBorder(),
+                          border: UnderlineInputBorder(),
                           labelText: 'Expiry Month',
                         ),
                         onSaved: (String? value) =>
@@ -135,10 +135,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     _horizontalSizeBox,
-                    new Expanded(
-                      child: new TextFormField(
+                    Expanded(
+                      child: TextFormField(
                         decoration: const InputDecoration(
-                          border: const UnderlineInputBorder(),
+                          border: UnderlineInputBorder(),
                           labelText: 'Expiry Year',
                         ),
                         onSaved: (String? value) =>
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                     primaryColorLight: Colors.white,
                     primaryColorDark: navyBlue,
                     textTheme: Theme.of(context).textTheme.copyWith(
-                          bodyText2: TextStyle(
+                          bodyMedium: TextStyle(
                             color: lightBlue,
                           ),
                         ),
@@ -164,38 +164,38 @@ class _HomePageState extends State<HomePage> {
                   child: Builder(
                     builder: (context) {
                       return _inProgress
-                          ? new Container(
+                          ? Container(
                               alignment: Alignment.center,
                               height: 50.0,
                               child: Platform.isIOS
-                                  ? new CupertinoActivityIndicator()
-                                  : new CircularProgressIndicator(),
+                                  ? CupertinoActivityIndicator()
+                                  : CircularProgressIndicator(),
                             )
-                          : new Column(
+                          : Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 _getPlatformButton(
                                     'Charge Card', () => _startAfreshCharge()),
                                 _verticalSizeBox,
                                 _border,
-                                new SizedBox(
+                                const SizedBox(
                                   height: 40.0,
                                 ),
-                                new Row(
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    new Flexible(
+                                    Flexible(
                                       flex: 3,
-                                      child: new DropdownButtonHideUnderline(
-                                        child: new InputDecorator(
+                                      child: DropdownButtonHideUnderline(
+                                        child: InputDecorator(
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
                                             isDense: true,
                                             hintText: 'Checkout method',
                                           ),
-                                          child: new DropdownButton<
+                                          child: DropdownButton<
                                               CheckoutMethod>(
                                             value: _method,
                                             isDense: true,
@@ -205,11 +205,11 @@ class _HomePageState extends State<HomePage> {
                                               }
                                             },
                                             items: banks.map((String value) {
-                                              return new DropdownMenuItem<
+                                              return DropdownMenuItem<
                                                   CheckoutMethod>(
                                                 value:
                                                     _parseStringToMethod(value),
-                                                child: new Text(value),
+                                                child: Text(value),
                                               );
                                             }).toList(),
                                           ),
@@ -217,9 +217,9 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     _horizontalSizeBox,
-                                    new Flexible(
+                                    Flexible(
                                       flex: 2,
-                                      child: new Container(
+                                      child: SizedBox(
                                         width: double.infinity,
                                         child: _getPlatformButton(
                                           'Checkout',
@@ -376,20 +376,20 @@ class _HomePageState extends State<HomePage> {
     // is still in progress
     Widget widget;
     if (Platform.isIOS) {
-      widget = new CupertinoButton(
+      widget = CupertinoButton(
         onPressed: function,
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         color: CupertinoColors.activeBlue,
-        child: new Text(
+        child: Text(
           string,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
       );
     } else {
-      widget = new ElevatedButton(
+      widget = ElevatedButton(
         onPressed: function,
-        child: new Text(
+        child: Text(
           string.toUpperCase(),
           style: const TextStyle(fontSize: 17.0),
         ),
@@ -440,10 +440,10 @@ class _HomePageState extends State<HomePage> {
 
   _showMessage(String message,
       [Duration duration = const Duration(seconds: 4)]) {
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      content: new Text(message),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
       duration: duration,
-      action: new SnackBarAction(
+      action: SnackBarAction(
           label: 'CLOSE',
           onPressed: () =>
               ScaffoldMessenger.of(context).removeCurrentSnackBar()),
@@ -477,8 +477,8 @@ class MyLogo extends StatelessWidget {
         color: Colors.black,
       ),
       alignment: Alignment.center,
-      padding: EdgeInsets.all(10),
-      child: Text(
+      padding: const EdgeInsets.all(10),
+      child: const Text(
         "CO",
         style: TextStyle(
           color: Colors.white,
@@ -490,6 +490,6 @@ class MyLogo extends StatelessWidget {
   }
 }
 
-const Color green = const Color(0xFF3db76d);
-const Color lightBlue = const Color(0xFF34a5db);
-const Color navyBlue = const Color(0xFF031b33);
+const Color green = Color(0xFF3db76d);
+const Color lightBlue = Color(0xFF34a5db);
+const Color navyBlue = Color(0xFF031b33);
